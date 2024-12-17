@@ -1,0 +1,4 @@
+com\rag\chatbot\ChatbotApplication.class
+com\rag\chatbot\Repository\UserRepository.class
+com\rag\chatbot\Entity\User$UserBuilder.class
+com\rag\chatbot\Entity\User.class
