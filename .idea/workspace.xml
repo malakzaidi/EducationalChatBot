@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7ae89cc2-477b-4ecf-98f2-39cd16f60c5e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/Chatbot-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +97,7 @@
       <option name="presentableId" value="Default" />
       <updated>1734452516203</updated>
       <workItem from="1734452516776" duration="10993000" />
-      <workItem from="1734467027640" duration="9385000" />
+      <workItem from="1734467027640" duration="10084000" />
     </task>
     <servers />
   </component>
