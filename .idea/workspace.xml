@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7ae89cc2-477b-4ecf-98f2-39cd16f60c5e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/ChatBot/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/HELP.md" beforeDir="false" afterPath="$PROJECT_DIR$/HELP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/src/main/java/com/rag/chatbot/ChatbotApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rag/chatbot/ChatbotApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/src/main/java/com/rag/chatbot/Entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rag/chatbot/Entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/src/main/java/com/rag/chatbot/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rag/chatbot/Repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatBot/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/Chatbot-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,8 +43,11 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;TestMalak&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -75,7 +63,11 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.rag.chatbot.Service" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\IdeaProjects\Chatbot\Chatbot" />
       <recent name="C:\Users\admin\IdeaProjects\Chatbot" />
       <recent name="C:\Users\admin\IdeaProjects\Chatbot\ChatBot" />
     </key>
@@ -105,7 +97,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1734452516203</updated>
-      <workItem from="1734452516776" duration="3565000" />
+      <workItem from="1734452516776" duration="10993000" />
+      <workItem from="1734467027640" duration="9385000" />
     </task>
     <servers />
   </component>
