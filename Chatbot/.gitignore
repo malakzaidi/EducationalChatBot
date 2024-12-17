@@ -32,3 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 /target/
+# Ignore Spring Boot application properties file
+/src/main/resources/application.properties
+# Ignore .env file containing sensitive information
+.env
