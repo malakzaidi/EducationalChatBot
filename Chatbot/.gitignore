@@ -1,5 +1,4 @@
 ../HELP.md
-../target/
 !ChatBot/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -31,9 +30,9 @@ build/
 
 ### VS Code ###
 .vscode/
-/target/
 # Ignore Spring Boot application properties file
 /src/main/resources/application.properties
 # Ignore .env file containing sensitive information
 .env
+#target/
 target/
