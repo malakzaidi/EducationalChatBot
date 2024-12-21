@@ -13,10 +13,11 @@
 .sts4-cache
 
 ### IntelliJ IDEA ###
-ChatBot/.idea
+
 *.iws
 *.iml
 *.ipr
+.idea/
 
 ### NetBeans ###
 /nbproject/private/
@@ -36,4 +37,5 @@ build/
 .env
 # Ignore target directory
 /target/
+
 
