@@ -36,6 +36,6 @@ build/
 # Ignore .env file containing sensitive information
 .env
 # Ignore target directory
-/target/
+target/
 
 
