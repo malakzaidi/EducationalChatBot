@@ -34,5 +34,6 @@ build/
 /src/main/resources/application.properties
 # Ignore .env file containing sensitive information
 .env
-#target/
-target/
+# Ignore target directory
+/target/
+

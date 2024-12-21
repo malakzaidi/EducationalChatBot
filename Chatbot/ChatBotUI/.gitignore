@@ -14,10 +14,10 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.iml
 *.ipr
+.idea/
 
 ### NetBeans ###
 /nbproject/private/
@@ -31,4 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
-target/
+# Ignore target directory
+/target/
+
