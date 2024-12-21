@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7ae89cc2-477b-4ecf-98f2-39cd16f60c5e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Chatbot/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Chatbot/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Chatbot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Chatbot/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Chatbot/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Chatbot/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chatbot/ChatBotUI/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Chatbot/ChatBotUI/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chatbot/ChatBotUI/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Chatbot/ChatBotUI/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chatbot/ChatBotUI/src/main/java/com/rag/chatbotui/ChatBotUiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Chatbot/ChatBotUI/src/main/java/com/rag/chatbotui/ChatBotUiApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chatbot/ChatBotUI/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Chatbot/ChatBotUI/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,22 +51,29 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.ChatbotUI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.JavaFxApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Chatbot [javafx:run].executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ChatBotUiApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;TestMalak&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/IdeaProjects/Chatbot/Chatbot/ChatBotUI/src/main/resources/images&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.6321839&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -68,13 +81,51 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.rag.chatbot.Service" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\IdeaProjects\Chatbot\Chatbot\ChatBotUI\src\main\resources\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\admin\IdeaProjects\Chatbot\Chatbot" />
       <recent name="C:\Users\admin\IdeaProjects\Chatbot" />
       <recent name="C:\Users\admin\IdeaProjects\Chatbot\ChatBot" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.JavaFxApplication">
+    <configuration name="ChatbotUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.rag.chatbot.ChatbotUI" />
+      <module name="Chatbot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rag.chatbot.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JavaFxApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.rag.chatbotui.JavaFxApplication" />
+      <module name="ChatBotUI" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Program Files\Java\javafx-sdk-17.0.13\lib&quot; --add-modules javafx.controls,javafx.fxml" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rag.chatbotui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ChatBotUiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="ChatBotUI" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.rag.chatbotui.ChatBotUiApplication" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Program Files\Java\javafx-sdk-17.0.13\lib&quot; --add-modules javafx.controls,javafx.fxml" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ChatbotApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Chatbot" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.rag.chatbot.ChatbotApplication" />
@@ -82,6 +133,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.ChatbotUI" />
+      <item itemvalue="Application.JavaFxApplication" />
+      <item itemvalue="Spring Boot.ChatBotUiApplication" />
+      <item itemvalue="Spring Boot.ChatbotApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.JavaFxApplication" />
+        <item itemvalue="Application.ChatbotUI" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -100,7 +163,13 @@
       <option name="presentableId" value="Default" />
       <updated>1734452516203</updated>
       <workItem from="1734452516776" duration="10993000" />
-      <workItem from="1734467027640" duration="11071000" />
+      <workItem from="1734467027640" duration="13753000" />
+      <workItem from="1734521593221" duration="927000" />
+      <workItem from="1734522888830" duration="12038000" />
+      <workItem from="1734551661424" duration="10228000" />
+      <workItem from="1734606871447" duration="17434000" />
+      <workItem from="1734626620921" duration="6000" />
+      <workItem from="1734681227842" duration="20919000" />
     </task>
     <servers />
   </component>
