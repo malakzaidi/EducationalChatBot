@@ -1,7 +1,6 @@
 package com.rag.chatbot.Controller;
 
 import com.rag.chatbot.Service.ChatAiService;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

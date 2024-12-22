@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -26,8 +27,15 @@ public class RagDataLoader {
     private Resource pdf;
     @Value("store-data.json")
     private String store;
+
+    private JdbcClient jdbcClient;
     private VectorStore vectorStore;
 
+
+    public RagDataLoader(JdbcClient jdbcClient,VectorStore vectorStore) {
+        this.jdbcClient = jdbcClient;
+        this.vectorStore = vectorStore;
+    }
 
 //    @Bean
     public SimpleVectorStore simpleVectorStore(EmbeddingModel embeddingModel) {
@@ -48,13 +56,17 @@ public class RagDataLoader {
         }
         return vectorStore;
     }
-//    @PostConstruct
+    @PostConstruct
     public void initStore() {
-        PagePdfDocumentReader pdfDocumentReader = new PagePdfDocumentReader(pdf);
-        List<Document> documents = pdfDocumentReader.get();
-        TextSplitter textSplitter = new TokenTextSplitter();
-        List<Document> splitDocuments = textSplitter.split(documents);
-        vectorStore.accept(splitDocuments);
+        Integer count = jdbcClient.sql("select count(*) from vector_store")
+                .query(Integer.class).single();
+        if (count == 0) {
+            PagePdfDocumentReader pdfDocumentReader = new PagePdfDocumentReader(pdf);
+            List<Document> documents = pdfDocumentReader.get();
+            TextSplitter textSplitter = new TokenTextSplitter();
+            List<Document> splitDocuments = textSplitter.split(documents);
+            vectorStore.add(splitDocuments);
+        }
     }
 
 //    private final SimpleVectorStore vectorStore;
@@ -71,28 +83,23 @@ public class RagDataLoader {
 //        }
 //    }
 //
-//    /**
-//     * Adds a new PDF document to the vector store and updates the database.
-//     *
-//     * @param pdfResource The PDF file uploaded by the user.
-//     * @throws IOException if there's an error processing the PDF.
-//     */
-//    public void addPdfToVectorStore(Resource pdfResource) throws IOException {
-//        // Step 1: Read PDF content
-//        PagePdfDocumentReader pdfReader = new PagePdfDocumentReader(pdfResource);
-//        List<Document> documents = pdfReader.get();
-//
-//        // Step 2: Split the content into chunks
-//        List<Document> splitDocuments = textSplitter.split(documents);
-//
-//        // Step 3: Update vector store with embeddings
-//        vectorStore.accept(splitDocuments);
-//
-//        // Step 4: Save the updated vector store to file
-//        vectorStore.save(new File(fileStore));
-//    }
-//
-//    public SimpleVectorStore getVectorStore() {
-//        return vectorStore;
-//    }
+    /**
+     * Adds a new PDF document to the vector store and updates the database.
+     *
+     * @param pdfResource The PDF file uploaded by the user.
+     * @throws IOException if there's an error processing the PDF.
+     */
+    public void addPdfToVectorStore(Resource pdfResource) throws IOException {
+        TextSplitter textSplitter = new TokenTextSplitter();
+        String fileStore;
+
+        PagePdfDocumentReader pdfReader = new PagePdfDocumentReader(pdfResource);
+        List<Document> documents = pdfReader.get();
+
+        List<Document> splitDocuments = textSplitter.split(documents);
+
+        vectorStore.add(splitDocuments);
+
+    }
+
 }

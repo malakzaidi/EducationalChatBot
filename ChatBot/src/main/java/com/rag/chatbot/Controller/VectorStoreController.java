@@ -21,26 +21,26 @@ public class VectorStoreController {
         this.ragDataLoader = ragDataLoader;
     }
 
-//    @PostMapping("/upload-pdf")
-//    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file) {
-//        try {
-//            if (!file.getContentType().equals("application/pdf")) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF files are allowed.");
-//            }
-//
-//            ByteArrayResource resource = new ByteArrayResource(file.getBytes()) {
-//                @Override
-//                public String getFilename() {
-//                    return file.getOriginalFilename();
-//                }
-//            };
-//
-//            // Process and add the PDF to the vector store
-//            ragDataLoader.addPdfToVectorStore(resource);
-//
-//            return ResponseEntity.ok("PDF successfully uploaded and added to the vector store.");
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the PDF file.");
-//        }
-//    }
+    @PostMapping("/upload-pdf")
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file) {
+        try {
+            if (!file.getContentType().equals("application/pdf")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF files are allowed.");
+            }
+
+            ByteArrayResource resource = new ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return file.getOriginalFilename();
+                }
+            };
+
+            // Process and add the PDF to the vector store
+            ragDataLoader.addPdfToVectorStore(resource);
+
+            return ResponseEntity.ok("PDF successfully uploaded and added to the vector store.");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the PDF file.");
+        }
+    }
 }
