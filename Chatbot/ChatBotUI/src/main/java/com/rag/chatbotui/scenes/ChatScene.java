@@ -8,11 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
@@ -39,8 +39,7 @@ public class ChatScene {
     private Map<String, List<ChatMessage>> conversations;
     private String currentConversationId;
     private VBox conversationsList;
-    private boolean isDarkMode = false;
-    private VBox userProfileSection;
+    private boolean isDarkMode = true;
     private static final String LIGHT_BG = "#ffffff";
     private static final String LIGHT_SECONDARY = "#f0f0f0";
     private static final String LIGHT_TEXT = "#000000";
@@ -65,7 +64,7 @@ public class ChatScene {
         conversations.put(currentConversationId, new ArrayList<>());
 
         SplitPane splitPane = new SplitPane();
-        splitPane.setStyle("-fx-background-color: #000000;");
+        splitPane.setStyle("-fx-background-color:#000000;");
 
         VBox sidebar = createSidebar();
         BorderPane chatArea = new BorderPane();
@@ -110,7 +109,6 @@ public class ChatScene {
         } else {
             System.err.println("Warning: Could not load CSS file: /styles/light-chat.css");
         }
-
         splitPane.prefWidthProperty().bind(scene.widthProperty());
         splitPane.prefHeightProperty().bind(scene.heightProperty());
 
@@ -123,7 +121,7 @@ public class ChatScene {
         welcomeBox.getStyleClass().add("welcome-container");
         welcomeBox.setAlignment(Pos.CENTER);
 
-        Label welcomeLabel = new Label("How can I help you?");
+        Label welcomeLabel = new Label("How can I assist you today ?");
         welcomeLabel.getStyleClass().add("welcome-message");
         welcomeLabel.setStyle("-fx-text-fill: #ececf1;");
 
@@ -133,45 +131,34 @@ public class ChatScene {
         messageContainer.getChildren().add(welcomeBox);
     }
 
-    private HBox createLoadingIndicator() {
-        HBox container = new HBox(5);
-        container.setAlignment(Pos.CENTER_LEFT);
-        container.setPadding(new Insets(10, 20, 10, 20));
-
-        for (int i = 0; i < 3; i++) {
-            Rectangle dot = new Rectangle(8, 8);
-            dot.setArcHeight(8);
-            dot.setArcWidth(8);
-            dot.setFill(Color.web("#10a37f"));
-
-            Timeline timeline = new Timeline(
-                    new KeyFrame(Duration.ZERO, new KeyValue(dot.opacityProperty(), 1.0)),
-                    new KeyFrame(Duration.seconds(0.5), new KeyValue(dot.opacityProperty(), 0.3)),
-                    new KeyFrame(Duration.seconds(1.0), new KeyValue(dot.opacityProperty(), 1.0))
-            );
-            timeline.setDelay(Duration.seconds(i * 0.2));
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-
-            container.getChildren().add(dot);
-        }
-
-        return container;
-    }
-
     private VBox createSidebar() {
         VBox sidebar = new VBox(20);
         sidebar.getStyleClass().add("sidebar");
-        sidebar.setPadding(new Insets(20));
-        sidebar.setPrefWidth(260);
+        sidebar.setPadding(new Insets(30));
+        sidebar.setPrefWidth(280);
 
-        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/images/enset.jpg")));
-        logo.setFitWidth(180);
+        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/images/logo.png")));
+        VBox vbox = new VBox();
+        logo.setFitWidth(160);
         logo.setPreserveRatio(true);
-
+        logo.setSmooth(true);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(30, 20, 40, 20));
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setMaxWidth(Double.MAX_VALUE);
+        vbox.getChildren().add(logo);
         Button newChatButton = new Button("New chat");
         newChatButton.getStyleClass().add("new-chat-button");
         newChatButton.setMaxWidth(Double.MAX_VALUE);
+        newChatButton.setStyle(
+                "-fx-background-color: #ADD8E6;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-padding: 12px 16px;" +
+                        "-fx-background-radius: 8px;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-min-width: 200px;"
+        );
         newChatButton.setOnAction(e -> createNewConversation());
 
         conversationsList = new VBox(10);
@@ -180,148 +167,22 @@ public class ChatScene {
         conversationsScroll.setFitToWidth(true);
         conversationsScroll.getStyleClass().add("conversations-scroll");
 
-        userProfileSection = createUserProfile();
 
-        HBox themeToggle = createThemeToggle();
 
         VBox mainContent = new VBox(20);
         mainContent.getChildren().addAll(conversationsScroll);
         VBox.setVgrow(mainContent, Priority.ALWAYS);
 
         VBox footer = new VBox(10);
-        footer.getChildren().addAll(new Separator(), userProfileSection, themeToggle);
 
-        sidebar.getChildren().addAll(logo, newChatButton, new Separator(), mainContent, footer);
+
+        sidebar.getChildren().addAll(logo, newChatButton, new Separator(), mainContent, footer,vbox);
         return sidebar;
     }
 
-    private VBox createUserProfile() {
-        VBox profile = new VBox(10);
-        profile.getStyleClass().add("user-profile");
 
-        HBox userInfo = new HBox(12);
-        userInfo.setAlignment(Pos.CENTER_LEFT);
 
-        Circle avatar = new Circle(20);
-        avatar.setFill(Color.web("#10a37f"));
-        Label avatarLabel = new Label("U");
-        avatarLabel.setTextFill(Color.WHITE);
-        avatarLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
-        StackPane avatarPane = new StackPane(avatar, avatarLabel);
 
-        VBox details = new VBox(2);
-        Label nameLabel = new Label("User Name");
-        Label emailLabel = new Label("user@enset.ma");
-        nameLabel.getStyleClass().add("user-name");
-        emailLabel.getStyleClass().add("user-email");
-        details.getChildren().addAll(nameLabel, emailLabel);
-
-        userInfo.getChildren().addAll(avatarPane, details);
-        profile.getChildren().add(userInfo);
-
-        return profile;
-    }
-
-    private HBox createThemeToggle() {
-        HBox container = new HBox(10);
-        container.setAlignment(Pos.CENTER_LEFT);
-        container.getStyleClass().add("theme-toggle-container");
-
-        ToggleButton themeToggle = new ToggleButton();
-        themeToggle.getStyleClass().add("theme-toggle");
-        themeToggle.setSelected(isDarkMode);
-
-        ImageView lightIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/Lighttheme.png")));
-        ImageView darkIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/Darktheme.png")));
-        lightIcon.setFitWidth(20);
-        lightIcon.setFitHeight(20);
-        darkIcon.setFitWidth(20);
-        darkIcon.setFitHeight(20);
-
-        themeToggle.setGraphic(isDarkMode ? darkIcon : lightIcon);
-
-        themeToggle.setOnAction(e -> {
-            isDarkMode = themeToggle.isSelected();
-            themeToggle.setGraphic(isDarkMode ? darkIcon : lightIcon);
-            updateTheme();
-        });
-
-        container.getChildren().add(themeToggle);
-        return container;
-    }
-
-    private void updateTheme() {
-        if (scene != null) {
-            URL lightCss = getClass().getResource("/styles/light-chat.css");
-            URL darkCss = getClass().getResource("/styles/dark-chat.css");
-
-            scene.getStylesheets().clear();
-            if (isDarkMode && darkCss != null) {
-                scene.getStylesheets().add(darkCss.toExternalForm());
-                scene.getRoot().getStyleClass().add("dark-mode");
-            } else if (lightCss != null) {
-                scene.getStylesheets().add(lightCss.toExternalForm());
-                scene.getRoot().getStyleClass().remove("dark-mode");
-            }
-        }
-        String bgColor = isDarkMode ? DARK_BG : LIGHT_BG;
-        String secondaryBg = isDarkMode ? DARK_SECONDARY : LIGHT_SECONDARY;
-        String textColor = isDarkMode ? DARK_TEXT : LIGHT_TEXT;
-        String secondaryText = isDarkMode ? DARK_SECONDARY_TEXT : LIGHT_SECONDARY_TEXT;
-
-        scene.getRoot().setStyle("-fx-background-color: " + bgColor + ";");
-        sidebarContent.setStyle("-fx-background-color: " + secondaryBg + ";");
-        messageContainer.setStyle("-fx-background-color: " + bgColor + ";");
-
-        for (Node node : messageContainer.getChildren()) {
-            if (node instanceof HBox messageBox) {
-                VBox messageContent = (VBox) messageBox.getChildren().stream()
-                        .filter(n -> n instanceof VBox)
-                        .findFirst()
-                        .orElse(null);
-
-                if (messageContent != null) {
-                    for (Node child : messageContent.getChildren()) {
-                        if (child instanceof Label) {
-                            child.setStyle("-fx-text-fill: " + textColor + ";");
-                        }
-                    }
-                }
-            }
-        }
-
-        messageField.setStyle(
-                "-fx-background-color: " + secondaryBg + ";" +
-                        "-fx-text-fill: " + textColor + ";" +
-                        "-fx-prompt-text-fill: " + secondaryText + ";"
-        );
-
-        if (scene.lookup(".header") instanceof HBox header) {
-            header.setStyle("-fx-background-color: " + secondaryBg + ";");
-            for (Node node : header.getChildren()) {
-                if (node instanceof Label) {
-                    node.setStyle("-fx-text-fill: " + textColor + ";");
-                }
-            }
-        }
-
-        if (!messageContainer.getChildren().isEmpty() &&
-                messageContainer.getChildren().get(0) instanceof VBox welcomeBox) {
-            welcomeBox.setStyle("-fx-background-color: " + bgColor + ";");
-            for (Node node : welcomeBox.getChildren()) {
-                if (node instanceof Label) {
-                    node.setStyle("-fx-text-fill: " + textColor + ";");
-                }
-            }
-        }
-
-        userProfileSection.setStyle("-fx-background-color: " + secondaryBg + ";");
-        for (Node node : userProfileSection.lookupAll(".user-name, .user-email")) {
-            if (node instanceof Label) {
-                node.setStyle("-fx-text-fill: " + textColor + ";");
-            }
-        }
-    }
 
     private void createNewConversation() {
         String newId = UUID.randomUUID().toString();
@@ -373,7 +234,7 @@ public class ChatScene {
         header.getStyleClass().add("header");
 
         Label titleLabel = new Label("ChatEnset");
-        titleLabel.setFont(Font.font("Marcellus", FontWeight.BOLD, 30));
+        titleLabel.setFont(Font.font("Marcellus", FontWeight.EXTRA_BOLD,30));
         titleLabel.setTextFill(Color.WHITE);
 
         header.getChildren().add(titleLabel);
@@ -408,6 +269,18 @@ public class ChatScene {
         messageField.setPromptText("Message Chat...");
         HBox.setHgrow(messageField, Priority.ALWAYS);
         messageField.getStyleClass().add("message-field");
+        messageField.setStyle(
+                "-fx-border-color: #353740;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 8px;" +
+                        "-fx-background-radius: 8px;" +
+                        "-fx-padding: 12px 16px;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-background-color: #121212;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-fill-width: true;" +
+                        "-fx-max-width: 30000px;"
+        );
 
         messageField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
@@ -517,12 +390,78 @@ public class ChatScene {
             return "I understand your question about '" + message + "'. Could you provide more details so I can better assist you?";
         }
     }
+    private HBox createLoadingIndicator() {
+        HBox container = new HBox(10);
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.setPadding(new Insets(20));
+        container.setStyle("-fx-background-color: #ADD8E6; -fx-background-radius: 8px;");
+
+        // Add processing message
+        Label processingLabel = new Label("ChatEnset is processing...");
+        processingLabel.setStyle("-fx-text-fill:#000000 ; -fx-font-size: 14px;");
+
+        VBox dotsContainer = new VBox();
+        dotsContainer.setAlignment(Pos.CENTER_LEFT);
+        dotsContainer.setPadding(new Insets(0, 0, 0, 10));
+
+        HBox dots = new HBox(8); // Increased spacing between dots
+        dots.setAlignment(Pos.CENTER_LEFT);
+
+        for (int i = 0; i < 3; i++) {
+            Circle dot = new Circle(6); // Increased size from 4 to 6
+            dot.setFill(Color.web("blue"));
+
+            // Create a more interesting animation
+            Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.ZERO,
+                            new KeyValue(dot.scaleXProperty(), 1.0),
+                            new KeyValue(dot.scaleYProperty(), 1.0),
+                            new KeyValue(dot.opacityProperty(), 1.0)
+                    ),
+                    new KeyFrame(Duration.seconds(0.5),
+                            new KeyValue(dot.scaleXProperty(), 1.5),
+                            new KeyValue(dot.scaleYProperty(), 1.5),
+                            new KeyValue(dot.opacityProperty(), 0.3)
+                    ),
+                    new KeyFrame(Duration.seconds(1.0),
+                            new KeyValue(dot.scaleXProperty(), 1.0),
+                            new KeyValue(dot.scaleYProperty(), 1.0),
+                            new KeyValue(dot.opacityProperty(), 1.0)
+                    )
+            );
+
+            timeline.setDelay(Duration.seconds(i * 0.2));
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
+
+            dots.getChildren().add(dot);
+        }
+
+        dotsContainer.getChildren().add(dots);
+        container.getChildren().addAll(processingLabel, dotsContainer);
+
+        return container;
+    }
 
     private void showLoadingIndicator(boolean show) {
         Platform.runLater(() -> {
-            loadingIndicator.setVisible(show);
+            if (show) {
+                loadingIndicator.setOpacity(0);
+                loadingIndicator.setVisible(true);
+                FadeTransition ft = new FadeTransition(Duration.millis(200), loadingIndicator);
+                ft.setFromValue(0);
+                ft.setToValue(1);
+                ft.play();
+            } else {
+                FadeTransition ft = new FadeTransition(Duration.millis(200), loadingIndicator);
+                ft.setFromValue(1);
+                ft.setToValue(0);
+                ft.setOnFinished(e -> loadingIndicator.setVisible(false));
+                ft.play();
+            }
         });
     }
+
 
     public void addMessage(String message, boolean isUser) {
         addMessage(message, isUser, true);
@@ -541,13 +480,6 @@ public class ChatScene {
         messageBox.getStyleClass().add("message-box");
         messageBox.setPadding(new Insets(8, 15, 8, 15));
 
-        Circle avatar = new Circle(20);
-        avatar.setFill(isUser ? Color.web("#10a37f") : Color.web("#19c37d"));
-        Label avatarLabel = new Label(isUser ? "U" : "AI");
-        avatarLabel.setTextFill(Color.WHITE);
-        avatarLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
-        StackPane avatarPane = new StackPane(avatar, avatarLabel);
-
         VBox messageContent = new VBox(4);
         messageContent.getStyleClass().add("message-content");
         messageContent.setMaxWidth(800);
@@ -555,17 +487,32 @@ public class ChatScene {
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
         messageLabel.getStyleClass().add(isUser ? "user-message" : "ai-message");
+        messageLabel.setStyle(
+                "-fx-background-color: " + (isUser ? "#ADD8E6" : "white") + ";" +
+                        "-fx-text-fill: " + (isUser ? "black" : "#353740") + ";" +
+                        "-fx-padding: 12px 16px;" +
+                        "-fx-background-radius: 12px;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-max-width: 800px;" +
+                        "-fx-wrap-text: true;"
+        );
+        if (!isUser) {
+            messageLabel.setStyle(messageLabel.getStyle() +
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 1);"
+            );
+        }
 
         Label timestampLabel = new Label(chatMessage.timestamp);
         timestampLabel.getStyleClass().add("timestamp");
+        timestampLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11px;");
 
         messageContent.getChildren().addAll(messageLabel, timestampLabel);
 
         if (isUser) {
-            messageBox.getChildren().addAll(messageContent, avatarPane);
+            messageBox.getChildren().add(messageContent);
             messageBox.setAlignment(Pos.CENTER_RIGHT);
         } else {
-            messageBox.getChildren().addAll(avatarPane, messageContent);
+            messageBox.getChildren().add(messageContent);
             messageBox.setAlignment(Pos.CENTER_LEFT);
         }
 
@@ -587,18 +534,11 @@ public class ChatScene {
         messageBox.getStyleClass().add("message-box");
         messageBox.setPadding(new Insets(8, 15, 8, 15));
 
-        Circle avatar = new Circle(20);
-        avatar.setFill(isUser ? Color.web("#10a37f") : Color.web("#19c37d"));
-        Label avatarLabel = new Label(isUser ? "U" : "AI");
-        avatarLabel.setTextFill(Color.WHITE);
-        avatarLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
-        StackPane avatarPane = new StackPane(avatar, avatarLabel);
-
         if (isUser) {
-            messageBox.getChildren().addAll(content, avatarPane);
+            messageBox.getChildren().add(content);
             messageBox.setAlignment(Pos.CENTER_RIGHT);
         } else {
-            messageBox.getChildren().addAll(avatarPane, content);
+            messageBox.getChildren().add(content);
             messageBox.setAlignment(Pos.CENTER_LEFT);
         }
 
@@ -617,4 +557,6 @@ public class ChatScene {
         return scene;
     }
 }
+
+
 

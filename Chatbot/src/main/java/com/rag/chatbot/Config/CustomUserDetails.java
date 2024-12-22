@@ -11,46 +11,54 @@ public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
+    // Constructor to initialize the User entity
     public CustomUserDetails(User user) {
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // You can define roles and authorities here. For now, it's empty.
+        // Return authorities/roles here. For now, it's empty as there are no roles defined.
         return Collections.emptyList();
     }
 
     @Override
     public String getPassword() {
+        // Returning the password from the User entity
         return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail(); // Assuming email is the username.
+        // Returning the email as the username
+        return user.getEmail();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Customize if necessary.
+        // Account is considered non-expired for now (can be customized if needed)
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Customize if necessary.
+        // Account is considered non-locked (customize this logic if necessary)
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Customize if necessary.
+        // Credentials are considered non-expired (can be customized if necessary)
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Customize if necessary.
+        // Account is considered enabled (you can customize this logic)
+        return true;
     }
 
+    // Accessor method to get the User entity (if needed elsewhere)
     public User getUser() {
         return user;
     }

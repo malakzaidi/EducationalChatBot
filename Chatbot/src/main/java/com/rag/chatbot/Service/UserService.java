@@ -1,85 +1,120 @@
 package com.rag.chatbot.Service;
 
-import com.rag.chatbot.Repository.UserRepository;
-import com.rag.chatbot.Entity.User;
-import com.rag.chatbot.DTO.AuthRequest;
-import com.rag.chatbot.DTO.AuthResponse;
+import com.rag.chatbot.DTO.JwtAuthenticationResponse;
+import com.rag.chatbot.DTO.RefreshTokenRequest;
 import com.rag.chatbot.DTO.RegisterRequest;
+import com.rag.chatbot.DTO.AuthRequest;
+import com.rag.chatbot.Entity.Role;
+import com.rag.chatbot.Entity.User;
+import com.rag.chatbot.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.rag.chatbot.Config.CustomUserDetails;
+
+import java.util.HashMap;
 
 
 @Service
-public class UserService {
-
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    // Constructor for explicit dependency injection
     @Autowired
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       JwtService jwtService,
-                       AuthenticationManager authenticationManager) {
+                       @Lazy AuthenticationManager authenticationManager,
+                       JWTService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+    }
+    // Override the method from UserDetailsService interface
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // Fetch user from the repository by email (which is the username in this case)
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        return user;  // Return the User entity which implements UserDetails
     }
 
-    // Register a new user
-    public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalStateException("Email already registered");
-        }
+    // Register a new user and return JWT tokens
+    public JwtAuthenticationResponse register(RegisterRequest registerRequest) {
+        // Create a new User object
+        User user = new User();
+        user.setFirstName(registerRequest.getFirstName());
+        user.setLastName(registerRequest.getLastName());
+        user.setPhoneNumber(registerRequest.getPhoneNumber());
+        user.setAddress(registerRequest.getAddress());
+        user.setEmail(registerRequest.getEmail());
+        user.setRole(Role.USER); // Default role
 
-        var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+        // Encode the password
+        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
+        user.setPassword(encodedPassword);
+
+        // Save the user to the repository
         userRepository.save(user);
 
-        var token = jwtService.generateToken(new CustomUserDetails(user)); // Pass CustomUserDetails
+        // Generate JWT and refresh tokens
+        String jwt = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
 
-        return AuthResponse.builder()
-                .token(token)
-                .build();
+        // Return JWT response with tokens
+        return new JwtAuthenticationResponse(jwt, refreshToken);
+
     }
 
-    // Authenticate an existing user
-    public AuthResponse authenticate(AuthRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
+    // Sign-in (authenticate) the user and return JWT tokens
+    public JwtAuthenticationResponse authenticate (AuthRequest authRequest) {
+        // Fetch user from the database
+        User user = userRepository.findByEmail(authRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        // Authenticate the user
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
         );
 
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        // Generate JWT and refresh tokens
+        String jwt = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
 
-        var token = jwtService.generateToken(new CustomUserDetails(user)); // Pass CustomUserDetails
-
-        return AuthResponse.builder()
-                .token(token)
-                .build();
+        // Return JWT response with tokens
+        return new JwtAuthenticationResponse(jwt, refreshToken);
     }
 
-    // UserDetailsService implementation
-    public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .map(CustomUserDetails::new) // Convert User to CustomUserDetails
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    // Refresh the JWT token using a refresh token
+    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        // Extract the username (email) from the refresh token
+        String email = jwtService.extractUsername(refreshTokenRequest.getToken());
+
+        // Fetch the user from the database
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Check if the refresh token is valid
+        if (jwtService.isTokenValid(refreshTokenRequest.getToken(), user)) {
+            // Generate a new JWT token
+            String jwt = jwtService.generateToken(user);
+            return new JwtAuthenticationResponse(jwt, refreshTokenRequest.getToken());
+        }
+
+        // Return null if the refresh token is invalid
+        return null;
+    }
+
+    // Save user details manually (optional)
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 }
-
