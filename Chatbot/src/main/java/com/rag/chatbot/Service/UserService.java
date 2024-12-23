@@ -51,9 +51,9 @@ public class UserService implements UserDetailsService {
     public JwtAuthenticationResponse register(RegisterRequest registerRequest) {
         // Create a new User object
         User user = new User();
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setPhoneNumber(registerRequest.getPhoneNumber());
+        user.setFirstname(registerRequest.getFirstName());
+        user.setLastname(registerRequest.getLastName());
+        user.setPhone(registerRequest.getPhoneNumber());
         user.setAddress(registerRequest.getAddress());
         user.setEmail(registerRequest.getEmail());
         user.setRole(Role.USER); // Default role

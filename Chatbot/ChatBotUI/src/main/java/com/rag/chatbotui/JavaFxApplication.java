@@ -71,4 +71,3 @@ public class JavaFxApplication extends Application {
     }
 }
 
-

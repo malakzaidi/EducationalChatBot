@@ -1,11 +1,13 @@
 package com.rag.chatbotui;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan(basePackages = "com.rag.chatbotui")
 public class ChatBotUiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ChatBotUiApplication.class, args);
+        // Start the application through the Launcher
+        Launcher.main(args);
     }
 }

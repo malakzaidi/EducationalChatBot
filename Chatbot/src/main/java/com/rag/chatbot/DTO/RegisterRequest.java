@@ -1,22 +1,19 @@
 package com.rag.chatbot.DTO;
 
-import lombok.*;
-
-@Data
-@Builder
 public class RegisterRequest {
     private String email;
     private String password;
     private String firstName;
     private String lastName;
-    private String address;  // Added address field
-    private String phoneNumber;  // Added phone number field
+    private String address;
+    private String phoneNumber;
 
     // Default constructor
     public RegisterRequest() {}
 
     // All-args constructor
-    public RegisterRequest(String email, String password, String firstName, String lastName, String address, String phoneNumber) {
+    public RegisterRequest(String email, String password, String firstName,
+                           String lastName, String address, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -25,7 +22,6 @@ public class RegisterRequest {
         this.phoneNumber = phoneNumber;
     }
 
-    // Getter and Setter for email
     public String getEmail() {
         return email;
     }
@@ -34,7 +30,6 @@ public class RegisterRequest {
         this.email = email;
     }
 
-    // Getter and Setter for password
     public String getPassword() {
         return password;
     }
@@ -43,7 +38,6 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    // Getter and Setter for firstName
     public String getFirstName() {
         return firstName;
     }
@@ -52,7 +46,6 @@ public class RegisterRequest {
         this.firstName = firstName;
     }
 
-    // Getter and Setter for lastName
     public String getLastName() {
         return lastName;
     }
@@ -61,7 +54,6 @@ public class RegisterRequest {
         this.lastName = lastName;
     }
 
-    // Getter and Setter for address
     public String getAddress() {
         return address;
     }
@@ -70,7 +62,6 @@ public class RegisterRequest {
         this.address = address;
     }
 
-    // Getter and Setter for phoneNumber
     public String getPhoneNumber() {
         return phoneNumber;
     }
