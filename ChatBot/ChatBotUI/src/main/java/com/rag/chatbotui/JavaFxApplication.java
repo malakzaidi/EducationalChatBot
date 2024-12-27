@@ -4,8 +4,10 @@ import javafx.application.Application;
 import com.rag.chatbotui.scenes.*;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
 
 
+@Component
 public class JavaFxApplication extends Application {
     private Stage primaryStage;
     private LoginScene loginScene;
@@ -48,7 +50,7 @@ public class JavaFxApplication extends Application {
         registerScene.getRegisterButton().setOnAction(e -> showLogin());
     }
 
-    private void showLogin() {
+    public void showLogin() {
         primaryStage.setScene(loginScene.getScene());
     }
 
@@ -65,6 +67,7 @@ public class JavaFxApplication extends Application {
         chatScene.addMessage("Hi! I have a question about my account.", true);
         chatScene.addMessage("Of course! What would you like to know about your account?", false);
     }
+
 
     public static void main(String[] args) {
         launch(args);

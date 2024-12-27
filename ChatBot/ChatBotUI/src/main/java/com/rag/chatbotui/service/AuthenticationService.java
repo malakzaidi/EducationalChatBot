@@ -1,8 +1,8 @@
 package com.rag.chatbotui.service;
 
-import com.rag.chatbot.DTO.AuthRequest;
-import com.rag.chatbot.DTO.JwtAuthenticationResponse;
-import com.rag.chatbot.DTO.RegisterRequest;
+import com.rag.chatbotui.DTO.AuthRequest;
+import com.rag.chatbotui.DTO.JwtAuthenticationResponse;
+import com.rag.chatbotui.DTO.RegisterRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

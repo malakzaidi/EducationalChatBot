@@ -1,4 +1,4 @@
-package com.rag.chatbot;
+package com.rag.chatbotui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

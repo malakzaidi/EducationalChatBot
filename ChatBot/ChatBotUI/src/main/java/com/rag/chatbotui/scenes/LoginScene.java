@@ -9,7 +9,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.paint.Color;
 import javafx.scene.effect.DropShadow;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class LoginScene {
     private Scene scene;
     private TextField usernameField;

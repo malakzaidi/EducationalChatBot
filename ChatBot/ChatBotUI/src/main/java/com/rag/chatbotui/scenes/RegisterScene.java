@@ -7,7 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RegisterScene {
     private Scene scene;
     private TextField usernameField;
@@ -23,6 +25,8 @@ public class RegisterScene {
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #f5f5f5;");
+
+
 
         // Title
         Label titleLabel = new Label("Create Account");
@@ -78,6 +82,10 @@ public class RegisterScene {
 
         // Create scene
         scene = new Scene(root, 400, 600);
+    }
+
+    public VBox getRoot() {
+        return (VBox) scene.getRoot();
     }
 
     public Scene getScene() {

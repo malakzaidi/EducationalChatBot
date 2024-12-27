@@ -1,12 +1,9 @@
 package com.rag.chatbotui.controllers;
 
-import com.rag.chatbot.DTO.JwtAuthenticationResponse;
-import com.rag.chatbotui.JavaFxApplication;
 import com.rag.chatbotui.service.AuthenticationService;
 import com.rag.chatbotui.scenes.LoginScene;
 import com.rag.chatbotui.scenes.RegisterScene;
 import com.rag.chatbotui.utils.SceneManager;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -40,7 +37,7 @@ public class LoginController {
 
 
     public void switchToRegisterScene(ActionEvent event) {
-        SceneManager.switchScene(registerScene);
+        SceneManager.switchScene(registerScene.getScene());
     }
 
     private void showError(String message) {

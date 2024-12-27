@@ -1,5 +1,6 @@
-package com.rag.chatbot;
+package com.rag.chatbotui;
 
+import com.rag.chatbotui.ChatbotUI;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;

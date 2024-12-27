@@ -1,4 +1,5 @@
-package com.rag.chatbot;
+package com.rag.chatbotui;
+import com.rag.chatbotui.ChatbotUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;

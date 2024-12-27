@@ -26,7 +26,10 @@ import javafx.animation.Timeline;
 import javafx.scene.shape.Rectangle;
 import java.io.File;
 import javafx.scene.Node;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class ChatScene {
     private Scene scene;
     private VBox messageContainer;

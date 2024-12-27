@@ -1,7 +1,7 @@
 package com.rag.chatbotui.controllers;
 
-import com.rag.chatbot.DTO.JwtAuthenticationResponse;
-import com.rag.chatbot.DTO.RegisterRequest;
+import com.rag.chatbotui.DTO.JwtAuthenticationResponse;
+import com.rag.chatbotui.DTO.RegisterRequest;
 import com.rag.chatbotui.JavaFxApplication;
 import com.rag.chatbotui.scenes.RegisterScene;
 import com.rag.chatbotui.service.AuthenticationService;
@@ -9,8 +9,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -62,7 +60,7 @@ public class RegisterController {
                 alert.showAndWait();
 
                 // Redirect to login screen
-                javaFxApplication.showLoginScene();
+                javaFxApplication.showLogin();
             } else {
                 // If the response is null, show an error
                 Alert alert = new Alert(AlertType.ERROR);
