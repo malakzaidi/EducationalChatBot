@@ -1,0 +1,146 @@
+.root {
+    -fx-background-color: #f4f4f4;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.main-layout {
+    -fx-background-color: #ffffff;
+}
+
+.header {
+    -fx-background-color: #ADD8E6;
+    -fx-padding: 20px;
+    -fx-spacing: 5px;
+}
+
+.header-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.header-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ecf0f1;
+}
+
+.sidebar {
+    -fx-background-color:#ADD8E6;
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-pref-width: 200px;
+}
+
+.sidebar-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 10px 0;
+}
+
+.sidebar-button {
+    -fx-background-color: #ADD8E6;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-min-width: 160px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #3498db;
+}
+
+.center-tabpane {
+    -fx-background-color: #ffffff;
+}
+
+.center-tabpane .tab-header-area .tab-header-background {
+    -fx-background-color: #ecf0f1;
+}
+
+.center-tabpane .tab {
+    -fx-background-color: #bdc3c7;
+    -fx-padding: 5px 15px;
+}
+
+.center-tabpane .tab:selected {
+    -fx-background-color: #ffffff;
+}
+
+.center-tabpane .tab-label {
+    -fx-text-fill:#ADD8E6;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.pdf-upload-content, .system-status-content {
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+}
+
+.upload-section, .preview-section {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ADD8E6;
+}
+
+.upload-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.upload-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.progress-indicator {
+    -fx-progress-color: #3498db;
+}
+
+.status-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.preview-scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.preview-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.file-preview-container {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+}
+
+.file-info {
+    -fx-background-color: #ecf0f1;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+}
+
+.metrics-grid {
+    -fx-hgap: 20px;
+    -fx-vgap: 10px;
+}
+
+.metrics-grid Label {
+    -fx-font-size: 14px;
+}
+
