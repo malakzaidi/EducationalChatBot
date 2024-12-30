@@ -1,81 +1,117 @@
 package com.rag.chatbotui.controllers;
 
-import com.rag.chatbotui.DTO.JwtAuthenticationResponse;
-import com.rag.chatbotui.DTO.RegisterRequest;
+import com.rag.chatbot.DTO.RegisterRequest;
 import com.rag.chatbotui.JavaFxApplication;
-import com.rag.chatbotui.scenes.RegisterScene;
-import com.rag.chatbotui.service.AuthenticationService;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RegisterController {
+    private final RestTemplate restTemplate;
+    private final String baseUrl;
+    private final JavaFxApplication javaFxApplication;
 
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
-    private JavaFxApplication javaFxApplication;
-
-    // Reference to RegisterScene, which contains the UI elements
-    private final RegisterScene registerScene;
-
-    public RegisterController(RegisterScene registerScene) {
-        this.registerScene = registerScene;
+    public RegisterController(
+            RestTemplate restTemplate,
+            @Value("${api.base-url}") String baseUrl,
+            JavaFxApplication javaFxapplication
+    ) {
+        this.restTemplate = restTemplate;
+        this.baseUrl = baseUrl;
+        this.javaFxApplication = javaFxapplication;
     }
 
-    public void handleRegister() {
-        // Get values from the input fields in the RegisterScene
-        TextField emailField = (TextField) registerScene.getRoot().lookup("#emailField");
-        TextField firstNameField = (TextField) registerScene.getRoot().lookup("#firstNameField");
-        TextField lastNameField = (TextField) registerScene.getRoot().lookup("#lastNameField");
-        TextField addressField = (TextField) registerScene.getRoot().lookup("#addressField");
-        TextField phoneNumberField = (TextField) registerScene.getRoot().lookup("#phoneNumberField");
-        PasswordField passwordField = (PasswordField) registerScene.getRoot().lookup("#passwordField");
+    public boolean handleRegistration(String email, String username, String password, String confirmPassword,
+                                      String firstName, String lastName, String address, String phoneNumber) {
+        if (!isValidInput(email, username, password, confirmPassword, firstName, lastName, address, phoneNumber)) {
+            return false;
+        }
 
-        String email = emailField.getText();
-        String password = passwordField.getText();
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
-        String address = addressField.getText();
-        String phoneNumber = phoneNumberField.getText();
-
-        // Create RegisterRequest object
-        RegisterRequest registerRequest = new RegisterRequest(email, password, firstName, lastName, address, phoneNumber);
+        RegisterRequest request = new RegisterRequest();
+        request.setEmail(email);
+        request.setPassword(password);
+        request.setFirstName(firstName);
+        request.setLastName(lastName);
+        request.setAddress(address);
+        request.setPhoneNumber(phoneNumber);
 
         try {
-            // Call the register method from the authentication service
-            JwtAuthenticationResponse response = authenticationService.register(registerRequest);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<RegisterRequest> entity = new HttpEntity<>(request, headers);
 
-            // Check if registration was successful
-            if (response != null) {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Registration Successful");
-                alert.setHeaderText(null);
-                alert.setContentText("You can now login!");
-                alert.showAndWait();
-
-                // Redirect to login screen
-                javaFxApplication.showLogin();
-            } else {
-                // If the response is null, show an error
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Registration Failed");
-                alert.setHeaderText(null);
-                alert.setContentText("Registration failed. Please try again.");
-                alert.showAndWait();
-            }
+            String response = restTemplate.postForObject(
+                    baseUrl + "/register",
+                    entity,
+                    String.class
+            );
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Registration successful!");
+            javaFxApplication.showLoginScene();
+            return true;
         } catch (Exception e) {
-            // Handle any exceptions during registration
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Registration Failed");
-            alert.setHeaderText(null);
-            alert.setContentText("An error occurred: " + e.getMessage());
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Error", "Registration failed: " + e.getMessage());
+            return false;
         }
+    }
+
+    private boolean isValidInput(String email, String username, String password, String confirmPassword,
+                                 String firstName, String lastName, String address, String phoneNumber) {
+        if (email == null || email.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Email is required");
+            return false;
+        }
+
+        if (username == null || username.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Username is required");
+            return false;
+        }
+
+        if (password == null || password.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Password is required");
+            return false;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Passwords do not match");
+            return false;
+        }
+
+        if (firstName == null || firstName.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "First name is required");
+            return false;
+        }
+
+        if (lastName == null || lastName.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Last name is required");
+            return false;
+        }
+
+        if (address == null || address.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Address is required");
+            return false;
+        }
+
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Phone number is required");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    public void navigateToLogin() {
+        javaFxApplication.showLoginScene();
     }
 }

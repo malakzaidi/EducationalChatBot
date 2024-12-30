@@ -1,8 +1,9 @@
 package com.rag.chatbotui.service;
 
-import com.rag.chatbotui.DTO.AuthRequest;
-import com.rag.chatbotui.DTO.JwtAuthenticationResponse;
-import com.rag.chatbotui.DTO.RegisterRequest;
+
+import com.rag.chatbot.DTO.AuthRequest;
+import com.rag.chatbot.DTO.JwtAuthenticationResponse;
+import com.rag.chatbot.DTO.RegisterRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
-    private final String BASE_URL = "http://localhost:8083/api/auth";
+    private final String BASE_URL = "http://localhost:9090/api/auth";
     private final RestTemplate restTemplate;
 
     public AuthenticationService() {
@@ -61,3 +62,4 @@ public class AuthenticationService {
         return response.getBody();
     }
 }
+

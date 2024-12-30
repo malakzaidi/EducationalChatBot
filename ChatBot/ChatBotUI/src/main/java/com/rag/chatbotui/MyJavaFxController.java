@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 public class MyJavaFxController {
 
     public Scene createScene() {
-        // Example simple scene
         StackPane root = new StackPane(new Label("Hello, Spring Boot with JavaFX!"));
         return new Scene(root, 800, 600);
     }

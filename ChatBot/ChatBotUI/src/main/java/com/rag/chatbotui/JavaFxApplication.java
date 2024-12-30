@@ -1,76 +1,157 @@
 package com.rag.chatbotui;
 
+import com.rag.chatbotui.scenes.AdminLoginScene;
+import com.rag.chatbotui.scenes.ChatScene;
+import com.rag.chatbotui.scenes.LoginScene;
+import com.rag.chatbotui.scenes.RegisterScene;
 import javafx.application.Application;
-import com.rag.chatbotui.scenes.*;
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class JavaFxApplication extends Application {
-    private Stage primaryStage;
-    private LoginScene loginScene;
-    private RegisterScene registerScene;
-    private ChatScene chatScene;
+    private static ConfigurableApplicationContext applicationContext;
+    private static Stage primaryStage;
+    private static volatile boolean isInitialized = false;
+
+    public JavaFxApplication() {
+    }
 
     @Override
-    public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public void init() {
+        if (applicationContext == null) {
+            applicationContext = Launcher.initializeSpringContext(getParameters().getRaw().toArray(new String[0]));
+        }
+    }
 
-        // Initialize scenes
-        loginScene = new LoginScene();
-        registerScene = new RegisterScene();
-        chatScene = new ChatScene();
+    public static void setApplicationContext(ConfigurableApplicationContext context) {
+        applicationContext = context;
+    }
 
-        // Set up navigation handlers
-        setupNavigationHandlers();
-
-        // Set initial scene to login
-        primaryStage.setTitle("ChatBot Application");
-        primaryStage.setScene(loginScene.getScene());
-        primaryStage.show();
-
-        // Simulate auto-login after 2 seconds
+    @Override
+    public void start(Stage stage) {
+        primaryStage = stage;
+        isInitialized = true;
+        System.out.println("JavaFxApplication started, primaryStage initialized.");
         Platform.runLater(() -> {
             try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                showLoginScene();
+            } catch (Exception e) {
+                System.err.println("Error showing login scene: " + e.getMessage());
                 e.printStackTrace();
             }
-            showChat();
-            addExampleMessages();
         });
     }
 
-    private void setupNavigationHandlers() {
-        loginScene.getRegisterLink().setOnAction(e -> showRegister());
-        registerScene.getLoginLink().setOnAction(e -> showLogin());
-        loginScene.getLoginButton().setOnAction(e -> showChat());
-        registerScene.getRegisterButton().setOnAction(e -> showLogin());
+    @Override
+    public void stop() {
+        if (applicationContext != null) {
+            applicationContext.close();
+        }
+        Platform.exit();
     }
 
-    public void showLogin() {
-        primaryStage.setScene(loginScene.getScene());
+    // Scene management methods
+    public void showLoginScene() {
+        ensureInitialized();
+        Platform.runLater(() -> {
+            try {
+                LoginScene loginScene = applicationContext.getBean(LoginScene.class);
+                setScene(loginScene.getScene(), "Login", 600, 400);
+            } catch (Exception e) {
+                handleSceneError("login", e);
+            }
+        });
     }
 
-    private void showRegister() {
-        primaryStage.setScene(registerScene.getScene());
+    public void showRegisterScene() {
+        ensureInitialized();
+        Platform.runLater(() -> {
+            try {
+                RegisterScene registerScene = applicationContext.getBean(RegisterScene.class);
+                setScene(registerScene.getScene(), "Register", 600, 400);
+            } catch (Exception e) {
+                handleSceneError("register", e);
+            }
+        });
     }
 
-    private void showChat() {
-        primaryStage.setScene(chatScene.getScene());
+    public void showChatScene() {
+        ensureInitialized();
+        Platform.runLater(() -> {
+            try {
+                ChatScene chatScene = applicationContext.getBean(ChatScene.class);
+                setScene(chatScene.getScene(), "Chat", 1200, 800);
+            } catch (Exception e) {
+                handleSceneError("chat", e);
+            }
+        });
     }
 
-    private void addExampleMessages() {
-        chatScene.addMessage("Hello! How can I assist you today?", false);
-        chatScene.addMessage("Hi! I have a question about my account.", true);
-        chatScene.addMessage("Of course! What would you like to know about your account?", false);
+    public void showLoginAdminScene() {
+        ensureInitialized(); // Ensure that any necessary initialization is done
+        Platform.runLater(() -> {
+            try {
+                // Retrieve the AdminLoginScene bean from the application context
+                AdminLoginScene adminLoginScene = applicationContext.getBean(AdminLoginScene.class);
+
+                // Set the scene in the Stage (replace 'setScene' with your method for setting the scene)
+                setScene(adminLoginScene.getScene(), "Admin Login", 600, 400);
+            } catch (Exception e) {
+                // Handle any error that might occur when retrieving or setting the scene
+                handleSceneError("admin login", e);
+            }
+        });
     }
 
 
-    public static void main(String[] args) {
-        launch(args);
+    private void setScene(Scene scene, String title, int width, int height) {
+        ensureInitialized();
+        if (scene == null) {
+            throw new IllegalArgumentException("Scene cannot be null");
+        }
+
+        primaryStage.setTitle(title);
+        primaryStage.setScene(scene);
+        primaryStage.setWidth(width);
+        primaryStage.setHeight(height);
+        primaryStage.centerOnScreen();
+
+        if (!primaryStage.isShowing()) {
+            primaryStage.show();
+        }
+    }
+
+    private void ensureInitialized() {
+        if (!isInitialized || primaryStage == null) {
+            throw new IllegalStateException("JavaFX Application is not properly initialized");
+        }
+    }
+
+    private void handleSceneError(String sceneName, Exception e) {
+        System.err.println("Error switching to " + sceneName + " scene: " + e.getMessage());
+        e.printStackTrace();
+        // You could add additional error handling here, such as showing an error dialog
+    }
+
+    public static ConfigurableApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 }
+
+
+
+
+
+
+
+
+
 

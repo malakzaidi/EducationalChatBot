@@ -1,5 +1,6 @@
 package com.rag.chatbotui.scenes;
 
+import com.rag.chatbotui.controllers.ChatController;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -16,39 +17,27 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
-
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.scene.shape.Rectangle;
 import java.io.File;
 import javafx.scene.Node;
 import org.springframework.stereotype.Component;
-
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 public class ChatScene {
+    private final ChatController chatController;
     private Scene scene;
     private VBox messageContainer;
-    private static final String DARK_TEXT = "#ffffff";
-    private static final String DARK_SECONDARY_TEXT = "#a3a3a3";
     private TextField messageField;
-    private VBox sidebarContent;
     private ScrollPane scrollPane;
     private HBox loadingIndicator;
     private Map<String, List<ChatMessage>> conversations;
     private String currentConversationId;
     private VBox conversationsList;
-    private boolean isDarkMode = true;
-    private static final String LIGHT_BG = "#ffffff";
-    private static final String LIGHT_SECONDARY = "#f0f0f0";
-    private static final String LIGHT_TEXT = "#000000";
-    private static final String LIGHT_SECONDARY_TEXT = "#666666";
-    private static final String DARK_BG = "#000000";
-    private static final String DARK_SECONDARY = "#000000";
 
     private static class ChatMessage {
         String content;
@@ -61,17 +50,19 @@ public class ChatScene {
         }
     }
 
-    public ChatScene() {
+    public ChatScene(ChatController chatController) {
+        this.chatController = chatController;
+
         conversations = new HashMap<>();
         currentConversationId = UUID.randomUUID().toString();
         conversations.put(currentConversationId, new ArrayList<>());
 
         SplitPane splitPane = new SplitPane();
-        splitPane.setStyle("-fx-background-color:#000000;");
+        splitPane.setStyle("-fx-background-color:#FFFFFF;");
 
         VBox sidebar = createSidebar();
         BorderPane chatArea = new BorderPane();
-        chatArea.setStyle("-fx-background-color: #000000;");
+        chatArea.setStyle("-fx-background-color: #FFFFFF;");
         HBox.setHgrow(chatArea, Priority.ALWAYS);
         chatArea.getStyleClass().add("conversation-area");
 
@@ -112,6 +103,7 @@ public class ChatScene {
         } else {
             System.err.println("Warning: Could not load CSS file: /styles/light-chat.css");
         }
+
         splitPane.prefWidthProperty().bind(scene.widthProperty());
         splitPane.prefHeightProperty().bind(scene.heightProperty());
 
@@ -120,17 +112,16 @@ public class ChatScene {
 
     private void showWelcomeMessage() {
         VBox welcomeBox = new VBox(20);
-        welcomeBox.setStyle("-fx-background-color: #000000;");
+        welcomeBox.setStyle("-fx-background-color: #FFFFFF;");
         welcomeBox.getStyleClass().add("welcome-container");
         welcomeBox.setAlignment(Pos.CENTER);
 
-        Label welcomeLabel = new Label("How can I assist you today ?");
+        Label welcomeLabel = new Label("How can I assist you today?");
         welcomeLabel.getStyleClass().add("welcome-message");
-        welcomeLabel.setStyle("-fx-text-fill: #ececf1;");
+        welcomeLabel.setStyle("-fx-text-fill: #000000;");
 
         welcomeBox.getChildren().add(welcomeLabel);
-        messageContainer.getChildren().clear();
-        messageContainer.setStyle("-fx-background-color: #000000;");
+        messageContainer.setStyle("-fx-background-color: #FFFFFF;");
         messageContainer.getChildren().add(welcomeBox);
     }
 
@@ -141,15 +132,10 @@ public class ChatScene {
         sidebar.setPrefWidth(280);
 
         ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/images/logo.png")));
-        VBox vbox = new VBox();
         logo.setFitWidth(160);
         logo.setPreserveRatio(true);
         logo.setSmooth(true);
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setPadding(new Insets(30, 20, 40, 20));
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setMaxWidth(Double.MAX_VALUE);
-        vbox.getChildren().add(logo);
+
         Button newChatButton = new Button("New chat");
         newChatButton.getStyleClass().add("new-chat-button");
         newChatButton.setMaxWidth(Double.MAX_VALUE);
@@ -170,22 +156,13 @@ public class ChatScene {
         conversationsScroll.setFitToWidth(true);
         conversationsScroll.getStyleClass().add("conversations-scroll");
 
-
-
         VBox mainContent = new VBox(20);
         mainContent.getChildren().addAll(conversationsScroll);
         VBox.setVgrow(mainContent, Priority.ALWAYS);
 
-        VBox footer = new VBox(10);
-
-
-        sidebar.getChildren().addAll(logo, newChatButton, new Separator(), mainContent, footer,vbox);
+        sidebar.getChildren().addAll(logo, newChatButton, new Separator(), mainContent);
         return sidebar;
     }
-
-
-
-
 
     private void createNewConversation() {
         String newId = UUID.randomUUID().toString();
@@ -193,7 +170,6 @@ public class ChatScene {
         currentConversationId = newId;
         updateConversationsList();
         messageContainer.getChildren().clear();
-        messageContainer.setStyle("-fx-background-color: #000000;");
         showWelcomeMessage();
     }
 
@@ -237,8 +213,8 @@ public class ChatScene {
         header.getStyleClass().add("header");
 
         Label titleLabel = new Label("ChatEnset");
-        titleLabel.setFont(Font.font("Marcellus", FontWeight.EXTRA_BOLD,30));
-        titleLabel.setTextFill(Color.WHITE);
+        titleLabel.setFont(Font.font("Marcellus", FontWeight.EXTRA_BOLD, 30));
+        titleLabel.setTextFill(Color.BLACK);
 
         header.getChildren().add(titleLabel);
         return header;
@@ -272,18 +248,6 @@ public class ChatScene {
         messageField.setPromptText("Message Chat...");
         HBox.setHgrow(messageField, Priority.ALWAYS);
         messageField.getStyleClass().add("message-field");
-        messageField.setStyle(
-                "-fx-border-color: #353740;" +
-                        "-fx-border-width: 1px;" +
-                        "-fx-border-radius: 8px;" +
-                        "-fx-background-radius: 8px;" +
-                        "-fx-padding: 12px 16px;" +
-                        "-fx-font-size: 14px;" +
-                        "-fx-background-color: #121212;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-fill-width: true;" +
-                        "-fx-max-width: 30000px;"
-        );
 
         messageField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
@@ -323,18 +287,7 @@ public class ChatScene {
 
         addMessage(attachmentBox, true);
 
-        showLoadingIndicator(true);
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-                Platform.runLater(() -> {
-                    addMessage("I've received your document '" + file.getName() + "'. I can now answer questions about its content.", false);
-                    showLoadingIndicator(false);
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        // TODO: Implement file upload handling with ChatController
     }
 
     private String formatFileSize(long bytes) {
@@ -365,41 +318,30 @@ public class ChatScene {
 
     private void processUserMessage(String message) {
         showLoadingIndicator(true);
+
         new Thread(() -> {
             try {
-                Thread.sleep(1500);
-                String response = generateResponse(message);
+                String response = chatController.sendMessage(message);
                 Platform.runLater(() -> {
-                    addMessage(response, false);
                     showLoadingIndicator(false);
+                    addMessage(response, false);
                 });
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                Platform.runLater(() -> {
+                    showLoadingIndicator(false);
+                    addMessage("Error: " + e.getMessage(), false);
+                });
             }
         }).start();
     }
 
-    private String generateResponse(String message) {
-        message = message.toLowerCase();
-        if (message.contains("hello") || message.contains("hi")) {
-            return "Hello! How can I assist you today?";
-        } else if (message.contains("java")) {
-            return "Java is a popular object-oriented programming language. What would you like to know about it?";
-        } else if (message.contains("javafx")) {
-            return "JavaFX is a software platform for creating desktop applications. Do you have any specific questions about JavaFX?";
-        } else if (message.contains("modern application development")) {
-            return "Modern application development involves various technologies and practices. Is there a particular aspect you're interested in?";
-        } else {
-            return "I understand your question about '" + message + "'. Could you provide more details so I can better assist you?";
-        }
-    }
     private HBox createLoadingIndicator() {
         HBox container = new HBox(10);
         container.setAlignment(Pos.CENTER_LEFT);
         container.setPadding(new Insets(20));
         container.setStyle("-fx-background-color: #ADD8E6; -fx-background-radius: 8px;");
 
-        // Add processing message
         Label processingLabel = new Label("ChatEnset is processing...");
         processingLabel.setStyle("-fx-text-fill:#000000 ; -fx-font-size: 14px;");
 
@@ -407,14 +349,13 @@ public class ChatScene {
         dotsContainer.setAlignment(Pos.CENTER_LEFT);
         dotsContainer.setPadding(new Insets(0, 0, 0, 10));
 
-        HBox dots = new HBox(8); // Increased spacing between dots
+        HBox dots = new HBox(8);
         dots.setAlignment(Pos.CENTER_LEFT);
 
         for (int i = 0; i < 3; i++) {
-            Circle dot = new Circle(6); // Increased size from 4 to 6
+            Circle dot = new Circle(6);
             dot.setFill(Color.web("blue"));
 
-            // Create a more interesting animation
             Timeline timeline = new Timeline(
                     new KeyFrame(Duration.ZERO,
                             new KeyValue(dot.scaleXProperty(), 1.0),
@@ -560,5 +501,14 @@ public class ChatScene {
         return scene;
     }
 }
+
+
+
+
+
+
+
+
+
 
 

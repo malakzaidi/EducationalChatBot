@@ -1,70 +1,109 @@
 package com.rag.chatbotui.scenes;
 
+import com.rag.chatbotui.controllers.LoginController;
+import com.rag.chatbotui.JavaFxApplication;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.paint.Color;
-import javafx.scene.effect.DropShadow;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class LoginScene {
+    private final LoginController loginController;
     private Scene scene;
-    private TextField usernameField;
+    private TextField emailField;
     private PasswordField passwordField;
-    private Hyperlink registerLink;
-    private Button loginButton;
+    private Label feedbackLabel;
 
-    public LoginScene() {
+    public LoginScene(LoginController loginController) {
+        this.loginController = loginController;
+
+        StackPane mainRoot = new StackPane();
+        mainRoot.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F0F8FF, #E6E6FA);"
+        );
+
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
-        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a237e, #4a148c);");
+        root.setMaxWidth(350);
 
         Label titleLabel = new Label("Welcome Back");
-        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 32));
-        titleLabel.setTextFill(Color.WHITE);
+        titleLabel.setFont(Font.font("Marcellus", FontWeight.BOLD, 32));
+        titleLabel.setTextFill(Color.valueOf("#2C3E50"));
 
-        usernameField = createStyledTextField("Username");
+        emailField = createStyledTextField("Email");
         passwordField = createStyledPasswordField("Password");
 
-        loginButton = new Button("Login");
+        Button loginButton = new Button("Login");
         loginButton.setStyle(
-                "-fx-background-color: #00c853; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-font-size: 16px; " +
-                        "-fx-padding: 10 20; " +
-                        "-fx-background-radius: 5;"
+                "-fx-background-color: #4A90E2; " +
+                        "-fx-text-fill: #FFFFFF; " +
+                        "-fx-font-size: 14px; " +
+                        "-fx-font-family: 'Marcellus'; " +
+                        "-fx-padding: 12px 16px; " +
+                        "-fx-background-radius: 8px; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);"
         );
+        loginButton.setPrefWidth(300);
         loginButton.setMaxWidth(300);
-        loginButton.setOnMouseEntered(e -> loginButton.setStyle(loginButton.getStyle() + "-fx-background-color: #00e676;"));
-        loginButton.setOnMouseExited(e -> loginButton.setStyle(loginButton.getStyle() + "-fx-background-color: #00c853;"));
+        loginButton.setOnAction(e -> handleLogin());
 
-        registerLink = new Hyperlink("Don't have an account? Register here");
-        registerLink.setTextFill(Color.LIGHTGRAY);
+        Hyperlink registerLink = new Hyperlink("Don't have an account? Register here");
+        registerLink.setTextFill(Color.valueOf("#4A90E2"));
+        registerLink.setOnAction(e -> loginController.navigateToRegister());
 
-        root.getChildren().addAll(titleLabel, usernameField, passwordField, loginButton, registerLink);
+        // New Admin Login Hyperlink
+        Hyperlink adminLoginLink = new Hyperlink("Login as an admin");
+        adminLoginLink.setTextFill(Color.valueOf("#4A90E2"));
+        adminLoginLink.setOnAction(e -> loginController.navigateToLoginAdmin());
 
-        scene = new Scene(root, 400, 500);
-        applyStyles(root);
+
+
+        feedbackLabel = new Label();
+        feedbackLabel.setTextFill(Color.RED);
+
+        root.getChildren().addAll(titleLabel, emailField, passwordField, loginButton, registerLink, adminLoginLink, feedbackLabel);
+
+        mainRoot.getChildren().add(root);
+        scene = new Scene(mainRoot, 400, 500);
+    }
+
+    private void handleLogin() {
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        boolean isLoginSuccessful = loginController.handleLogin(email, password);
+
+        if (isLoginSuccessful) {
+            JavaFxApplication javaFxApp = new JavaFxApplication();
+            javaFxApp.showChatScene();
+        } else {
+            feedbackLabel.setText("Invalid credentials, please try again.");
+        }
     }
 
     private TextField createStyledTextField(String promptText) {
         TextField field = new TextField();
         field.setPromptText(promptText);
+        field.setPrefWidth(300);
         field.setMaxWidth(300);
         field.setStyle(
-                "-fx-background-color: rgba(255, 255, 255, 0.2); " +
-                        "-fx-text-fill: white; " +
-                        "-fx-prompt-text-fill: lightgray; " +
-                        "-fx-background-radius: 5; " +
-                        "-fx-border-color: transparent; " +
-                        "-fx-padding: 10;"
+                "-fx-background-color: #FFFFFF; " +
+                        "-fx-text-fill: #2C3E50; " +
+                        "-fx-prompt-text-fill: #95A5A6; " +
+                        "-fx-background-radius: 8px; " +
+                        "-fx-border-color: #E0E0E0; " +
+                        "-fx-border-radius: 8px; " +
+                        "-fx-padding: 12px 16px; " +
+                        "-fx-font-family: 'Marcellus'; " +
+                        "-fx-font-size: 14px; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0, 0, 1);"
         );
         return field;
     }
@@ -72,50 +111,25 @@ public class LoginScene {
     private PasswordField createStyledPasswordField(String promptText) {
         PasswordField field = new PasswordField();
         field.setPromptText(promptText);
+        field.setPrefWidth(300);
         field.setMaxWidth(300);
         field.setStyle(
-                "-fx-background-color: rgba(255, 255, 255, 0.2); " +
-                        "-fx-text-fill: white; " +
-                        "-fx-prompt-text-fill: lightgray; " +
-                        "-fx-background-radius: 5; " +
-                        "-fx-border-color: transparent; " +
-                        "-fx-padding: 10;"
+                "-fx-background-color: #FFFFFF; " +
+                        "-fx-text-fill: #2C3E50; " +
+                        "-fx-prompt-text-fill: #95A5A6; " +
+                        "-fx-background-radius: 8px; " +
+                        "-fx-border-color: #E0E0E0; " +
+                        "-fx-border-radius: 8px; " +
+                        "-fx-padding: 12px 16px; " +
+                        "-fx-font-family: 'Marcellus'; " +
+                        "-fx-font-size: 14px; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0, 0, 1);"
         );
         return field;
     }
 
-    private void applyStyles(VBox root) {
-        DropShadow shadow = new DropShadow();
-        shadow.setColor(Color.rgb(0, 0, 0, 0.4));
-        shadow.setOffsetX(0);
-        shadow.setOffsetY(2);
-        shadow.setRadius(5);
-
-        root.getChildren().forEach(node -> {
-            if (node instanceof Control) {
-                ((Control) node).setEffect(shadow);
-            }
-        });
-    }
-
     public Scene getScene() {
         return scene;
-    }
-
-    public Hyperlink getRegisterLink() {
-        return registerLink;
-    }
-
-    public Button getLoginButton() {
-        return loginButton;
-    }
-
-    public String getUsername() {
-        return usernameField.getText();
-    }
-
-    public String getPassword() {
-        return passwordField.getText();
     }
 }
 

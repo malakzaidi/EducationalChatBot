@@ -1,49 +1,107 @@
 package com.rag.chatbotui.controllers;
 
-import com.rag.chatbotui.service.AuthenticationService;
-import com.rag.chatbotui.scenes.LoginScene;
-import com.rag.chatbotui.scenes.RegisterScene;
-import com.rag.chatbotui.utils.SceneManager;
-import javafx.event.ActionEvent;
-import javafx.scene.Scene;
+import com.rag.chatbot.DTO.AuthRequest;
+import com.rag.chatbotui.JavaFxApplication;
+import com.rag.chatbotui.scenes.ChatScene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import javafx.scene.paint.Color; // For Color class
-import com.rag.chatbotui.scenes.ChatScene; // For MainScene class
-
-
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class LoginController {
-
-    private final AuthenticationService authenticationService;
-    private final LoginScene loginScene;
-    private final RegisterScene registerScene;
+    private final RestTemplate restTemplate;
+    private final String baseUrl;
     private final ChatScene chatScene;
+    private Stage primaryStage;
+    private final JavaFxApplication javaFxApplication;
 
-    public LoginController(AuthenticationService authenticationService, LoginScene loginScene, RegisterScene registerScene, ChatScene chatScene) {
-        this.authenticationService = authenticationService;
-        this.loginScene = loginScene;
-        this.registerScene = registerScene;
+    public LoginController(
+            RestTemplate restTemplate,
+            @Value("${api.base-url}") String baseUrl,
+            @Lazy ChatScene chatScene,
+            JavaFxApplication javaFxApplication
+    ) {
+        this.restTemplate = restTemplate;
+        this.baseUrl = baseUrl;
         this.chatScene = chatScene;
+        this.javaFxApplication = javaFxApplication;
     }
 
-    private boolean validateCredentials(String username, String password) {
-        return "admin".equals(username) && "password".equals(password);
+    public void navigateToRegister() {
+        javaFxApplication.showRegisterScene();
+    }
+
+    public void navigateToLoginAdmin() {
+        javaFxApplication.showLoginAdminScene();
     }
 
 
-
-    public void switchToRegisterScene(ActionEvent event) {
-        SceneManager.switchScene(registerScene.getScene());
+    public void setPrimaryStage(Stage stage) {
+        this.primaryStage = stage;
     }
 
-    private void showError(String message) {
-        Alert alert = new Alert(AlertType.ERROR, message, ButtonType.OK);
+
+    public boolean handleLogin(String email, String password) {
+        if (!isValidInput(email, password)) {
+            return false;
+        }
+
+        try {
+
+            AuthRequest request = new AuthRequest(email, password);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<AuthRequest> entity = new HttpEntity<>(request, headers);
+
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    baseUrl + "/login",
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+            if (response.getStatusCode() == HttpStatus.OK) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Login successful!");
+                return true;
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Login failed!");
+                return false;
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Login failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean isValidInput(String email, String password) {
+        if (email == null || email.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Email is required");
+            return false;
+        }
+
+        if (password == null || password.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Password is required");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
         alert.showAndWait();
     }
 
-
 }
+
+
+
+
+

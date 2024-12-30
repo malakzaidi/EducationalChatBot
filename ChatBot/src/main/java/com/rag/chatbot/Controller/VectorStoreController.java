@@ -15,14 +15,31 @@ import java.io.IOException;
 @RequestMapping("/api/vector-store")
 public class VectorStoreController {
     private final RagDataLoader ragDataLoader;
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "password";
+    private static final String ADMIN_TOKEN = "valid-admin-token";
 
     @Autowired
     public VectorStoreController(RagDataLoader ragDataLoader) {
         this.ragDataLoader = ragDataLoader;
     }
 
+    @PostMapping("/admin-login")
+    public ResponseEntity<String> adminLogin(@RequestParam String username, @RequestParam String password) {
+        if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
+            return ResponseEntity.ok(ADMIN_TOKEN);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password.");
+    }
+
     @PostMapping("/upload-pdf")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadPdf(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("token") String token) {
+        if (!ADMIN_TOKEN.equals(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unauthorized: Invalid admin token.");
+        }
+
         try {
             if (!file.getContentType().equals("application/pdf")) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF files are allowed.");
@@ -44,3 +61,4 @@ public class VectorStoreController {
         }
     }
 }
+

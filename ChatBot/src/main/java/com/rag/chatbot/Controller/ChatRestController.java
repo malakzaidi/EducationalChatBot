@@ -1,23 +1,29 @@
 package com.rag.chatbot.Controller;
 
 import com.rag.chatbot.Service.ChatAiService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/api/auth/chat")
+@CrossOrigin(origins = "*")
 public class ChatRestController {
-    private ChatAiService chatAiService;
+    private final ChatAiService chatAiService;
 
     public ChatRestController(ChatAiService chatAiService) {
-        this.chatAiService=chatAiService;
-    }
-    @GetMapping("/ask")
-    public String ask(String request) {
-        System.out.println(request);
-        return chatAiService.ragChat(request);
+        this.chatAiService = chatAiService;
+        System.out.println("ChatRestController initialized");
     }
 
+    @GetMapping("/ask")
+    public ResponseEntity<String> ask(@RequestParam("request") String request) {
+        try {
+            System.out.println("Received chat request: " + request);
+            String response = chatAiService.ragChat(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 }

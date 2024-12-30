@@ -1,17 +1,18 @@
 package com.rag.chatbot.Controller;
 
 import com.rag.chatbot.DTO.*;
+import com.rag.chatbot.Service.ChatAiService;
 import com.rag.chatbot.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.rag.chatbot.Service.ChatAiService;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, ChatAiService chatAiService) {
         this.userService = userService;
         System.out.println("AuthController initialized");
     }
@@ -97,4 +98,5 @@ public class AuthController {
                     .body("Error: " + e.getMessage());
         }
     }
+
 }
